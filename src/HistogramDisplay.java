@@ -11,43 +11,45 @@ import org.jfree.ui.ApplicationFrame;
 
 public class HistogramDisplay extends ApplicationFrame {
     
+    private final Histogram <String> histogram;
     
-    public HistogramDisplay(){
-        super("Histogram");
+    public HistogramDisplay(Histogram<String> histogram){
+        super("HISTOGRAMA");
+        this.histogram = histogram;
         setContentPane(createPanel());
         pack();
-        
     }
+    
     public void execute(){
         setVisible(true);
     }
+    
     private JPanel createPanel(){
-        ChartPanel chartPanel = new ChartPanel(createChart(createDataset()));
-        setPreferredSize(new Dimension(500,400));
+        ChartPanel chartPanel = new ChartPanel(createChart(createDataSet()));
+        chartPanel.setPreferredSize(new Dimension(500,400));
         return chartPanel;
     }
+    
     private JFreeChart createChart(DefaultCategoryDataset dataSet){
-        JFreeChart chart  = ChartFactory.createBarChart(
-                "Diagrama de barras", 
-                "Dominios de emails",
-                "nº de emails", 
-                dataSet, 
-                PlotOrientation.VERTICAL,
-                false, 
-                rootPaneCheckingEnabled, 
-                rootPaneCheckingEnabled
-                );
+        JFreeChart chart = ChartFactory.createBarChart3D(
+            "JFreeChart Historigram", 
+            "Dominios email", 
+            "Nº de emails", 
+            dataSet, 
+            PlotOrientation.VERTICAL, 
+            false, 
+            rootPaneCheckingEnabled, 
+            rootPaneCheckingEnabled
+        );
         return chart;
     }
-    private DefaultCategoryDataset createDataset(){
+    
+    private DefaultCategoryDataset createDataSet(){
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
-        dataSet.addValue(4,"","gamil.com");
-        dataSet.addValue(5,"","ulpgc.es");
-        dataSet.addValue(2,"","hotmail.com");
-        dataSet.addValue(1,"","ull.es");
+        for (String key : histogram.keySet()){
+            dataSet.addValue(histogram.get(key), key, key);
+        }
         return dataSet;
-    }  
-
-
+    }
 
 }
